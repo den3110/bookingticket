@@ -5,7 +5,7 @@ import indexRouter from "./routes/index.js"
 import usersRouter from "./routes/users.js"
 import http from "http"
 import cors from "cors"
-const rateLimit = require('express-rate-limit');
+import rateLimit from 'express-rate-limit';
 const limiter = rateLimit({
   windowMs: 60 * 1000, // 1 phút
   max: 200, // Giới hạn 200 requests mỗi 1 phút cho mỗi IP
