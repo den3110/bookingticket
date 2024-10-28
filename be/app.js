@@ -5,14 +5,32 @@ import indexRouter from "./routes/index.js"
 import usersRouter from "./routes/users.js"
 import http from "http"
 import cors from "cors"
+const rateLimit = require('express-rate-limit');
+const limiter = rateLimit({
+  windowMs: 60 * 1000, // 1 phút
+  max: 200, // Giới hạn 200 requests mỗi 1 phút cho mỗi IP
+  message: 'Bạn đã gửi quá nhiều yêu cầu, vui lòng thử lại sau.'
+});
 
 const app = express()
 const server= http.createServer(app)
 // view engine setup
 
 app.use(logger('dev'))
-app.use(cors())
-app.use(express.json())
+app.use(cors({
+  origin: 'https://booking.gzomedia.net'
+}));
+app.use((req, res, next) => {
+  const userAgent = req.headers['user-agent'];
+
+  if (userAgent && userAgent.includes('Postman')) {
+      return res.status(403).send('Yêu cầu không được phép từ Postman');
+  }
+
+  next();
+});
+app.use(limiter);
+app.use(express.json({limit: "1mb"}))
 app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
