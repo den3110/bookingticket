@@ -17,9 +17,7 @@ const server= http.createServer(app)
 // view engine setup
 
 app.use(logger('dev'))
-app.use(cors({
-  origin: 'https://booking.gzomedia.net'
-}));
+
 app.use((req, res, next) => {
   const userAgent = req.headers['user-agent'];
 

@@ -23,6 +23,7 @@ export const airport_autocomplete = async (req, res) => {
                 Accept: "application/json",
                 Host: "apiportal.ivivu.com",
             },
+          
         });
 
         const data = response.data;

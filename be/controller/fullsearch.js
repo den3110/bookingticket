@@ -20,6 +20,8 @@ export const fullsearch = async (req, res) => {
   //     })
 
   // }
+  const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+  console.log(clientIp)
   const roundTrip = req.body.data.roundtrip !== "none" ? true : false;
   const fromPlace = req.body.data.origin;
   const toPlace = req.body.data.destination;
@@ -51,7 +53,7 @@ export const fullsearch = async (req, res) => {
       ticketClass = "f";
       break;
     default:
-      ticketClass = null
+      ticketClass = null;
       break;
   }
   const version = "2.0";
@@ -110,13 +112,19 @@ export const fullsearch = async (req, res) => {
     noCache: false,
   };
   const response2 = await axios({
-    url: "https://apiportal.ivivu.com/flightinbound//gate/apiv1/GetFlightDepart",
+    url: "https://apiportal.ivivu.com/flightinbound/gate/apiv1/GetFlightDepart",
     method: "post",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
       Host: "apiportal.ivivu.com",
+      "X-Forwarded-For": clientIp,
     },
+    // proxy: {
+    //   host: "103.116.52.132", // Địa chỉ IP của proxy
+    //   port: 8888,
+    //   protocol: "http",
+    // },
     data: JSON.stringify(payloadFlight),
   });
   //   console.log(response2?.data);
